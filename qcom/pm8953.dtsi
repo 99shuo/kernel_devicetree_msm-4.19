@@ -18,10 +18,10 @@
 		qcom,power-on@800 {
 			compatible = "qcom,qpnp-power-on";
 			reg = <0x800 0x100>;
-			interrupts = <0x0 0x8 0x0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0x8 0x1 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0x8 0x4 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0x8 0x5 IRQ_TYPE_LEVEL_HIGH>;
+			interrupts = <0x0 0x8 0x0 IRQ_TYPE_NONE>,
+				<0x0 0x8 0x1 IRQ_TYPE_NONE>,
+				<0x0 0x8 0x4 IRQ_TYPE_NONE>,
+				<0x0 0x8 0x5 IRQ_TYPE_NONE>;
 			interrupt-names = "kpdpwr", "resin",
 				"resin-bark", "kpdpwr-resin-bark";
 			qcom,pon-dbc-delay = <15625>;
@@ -50,19 +50,14 @@
 			#thermal-sensor-cells = <0>;
 		};
 
-		pm8953_coincell: qcom,coincell@2800 {
-			compatible = "qcom,qpnp-coincell";
-			reg = <0x2800 0x100>;
-		};
-
 		pm8953_mpps: mpps {
 			compatible = "qcom,spmi-mpp";
 			reg = <0xa000 0x400>;
 
-			interrupts = <0x0 0xa0 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xa1 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xa2 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xa3 0 IRQ_TYPE_LEVEL_HIGH>;
+			interrupts = <0x0 0xa0 0 IRQ_TYPE_NONE>,
+				<0x0 0xa1 0 IRQ_TYPE_NONE>,
+				<0x0 0xa2 0 IRQ_TYPE_NONE>,
+				<0x0 0xa3 0 IRQ_TYPE_NONE>;
 			interrupt-names = "pm8953_mpp1", "pm8953_mpp2",
 					"pm8953_mpp3", "pm8953_mpp4";
 
@@ -92,12 +87,12 @@
 			compatible = "qcom,spmi-gpio";
 			reg = <0xc000 0x800>;
 
-			interrupts = <0x0 0xc0 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xc1 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xc3 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xc4 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xc6 0 IRQ_TYPE_LEVEL_HIGH>,
-				<0x0 0xc7 0 IRQ_TYPE_LEVEL_HIGH>;
+			interrupts = <0x0 0xc0 0 IRQ_TYPE_NONE>,
+				<0x0 0xc1 0 IRQ_TYPE_NONE>,
+				<0x0 0xc3 0 IRQ_TYPE_NONE>,
+				<0x0 0xc4 0 IRQ_TYPE_NONE>,
+				<0x0 0xc6 0 IRQ_TYPE_NONE>,
+				<0x0 0xc7 0 IRQ_TYPE_NONE>;
 			interrupt-names = "pm8953_gpio1", "pm8953_gpio2",
 					"pm8953_gpio4", "pm8953_gpio5",
 					"pm8953_gpio7", "pm8953_gpio8";
@@ -214,11 +209,20 @@
 			#thermal-sensor-cells = <1>;
 			#address-cells = <1>;
 			#size-cells = <0>;
-			io-channels = <&pm8953_vadc VADC_LR_MUX3_BUF_XO_THERM>;
+			io-channels = <&pm8953_vadc VADC_LR_MUX3_BUF_XO_THERM>,
+					<&pm8953_vadc VADC_P_MUX4_1_1>;
 
 			xo_therm_buf {
 				reg = <VADC_LR_MUX3_BUF_XO_THERM>;
 				label = "xo_therm_buf";
+				qcom,ratiometric;
+				qcom,hw-settle-time = <200>;
+				qcom,pre-scaling = <1 1>;
+			};
+
+			case_therm {
+				reg = <VADC_P_MUX4_1_1>;
+				label = "case_therm";
 				qcom,ratiometric;
 				qcom,hw-settle-time = <200>;
 				qcom,pre-scaling = <1 1>;
