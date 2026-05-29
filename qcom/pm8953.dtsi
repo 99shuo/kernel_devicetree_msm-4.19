@@ -50,6 +50,11 @@
 			#thermal-sensor-cells = <0>;
 		};
 
+		pm8953_coincell: qcom,coincell@2800 {
+			compatible = "qcom,qpnp-coincell";
+			reg = <0x2800 0x100>;
+		};
+
 		pm8953_mpps: mpps {
 			compatible = "qcom,spmi-mpp";
 			reg = <0xa000 0x400>;
